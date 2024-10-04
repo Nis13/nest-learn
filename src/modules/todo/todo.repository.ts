@@ -14,18 +14,18 @@ export class TodoRepository extends Repository<ToDo> {
   }
 
   getById(id: string): Promise<ToDo> {
-    return this.findOneBy({ id: id });
+    return this.findOne({ where: { id: id }, relations: ['user'] });
   }
 
-  getByUserId(userId: string): Promise<ToDo> {
-    return this.findOne({
-      where: { users: { id: userId } },
+  getByUserId(userId: string): Promise<ToDo[]> {
+    return this.find({
+      where: { user: { id: userId } },
       relations: ['user'],
     });
   }
 
-  createTodo(todoToCreate: CreateTodoDTO): Promise<ToDo> {
-    const todo = this.create(todoToCreate);
+  createTodo(userId: string, todoToCreate: CreateTodoDTO): Promise<ToDo> {
+    const todo = this.create({ ...todoToCreate, userId });
     return this.save(todo);
   }
 
@@ -34,6 +34,6 @@ export class TodoRepository extends Repository<ToDo> {
   }
 
   deleteTodo(id: string): Promise<DeleteResult> {
-    return this.delete(id);
+    return this.softDelete(id);
   }
 }

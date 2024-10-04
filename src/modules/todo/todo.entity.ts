@@ -22,6 +22,9 @@ export class ToDo extends BaseEntity {
   @Column()
   status: TO_DO_STATUS;
 
+  @Column({ name: 'user_id' })
+  userId: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
@@ -30,5 +33,5 @@ export class ToDo extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.todos)
   @JoinColumn({ name: 'user_id' })
-  users: User[];
+  user: User;
 }

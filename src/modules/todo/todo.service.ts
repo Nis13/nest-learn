@@ -18,12 +18,12 @@ export class TodoService {
     return this.todoRepository.getById(id);
   }
 
-  getByUserId(userId: string) {
+  getByUserId(userId: string): Promise<ToDo[]> {
     return this.todoRepository.getByUserId(userId);
   }
 
-  create(todoToCreate: CreateTodoDTO): Promise<ToDo> {
-    return this.todoRepository.createTodo(todoToCreate);
+  create(userId: string, todoToCreate: CreateTodoDTO): Promise<ToDo> {
+    return this.todoRepository.createTodo(userId, todoToCreate);
   }
 
   async update(

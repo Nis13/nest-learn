@@ -11,14 +11,24 @@ import { UserService } from './user.service';
 import CreateUserDTO from './dto/create-user.dto';
 import { User } from './user.entity';
 import { UpdateUserDTO } from './dto/update-user.dto';
+import { TodoService } from '../todo/todo.service';
+import { ToDo } from '../todo/todo.entity';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly todoService: TodoService,
+  ) {}
 
   @Get()
   getAll(): Promise<User[]> {
     return this.userService.getall();
+  }
+
+  @Get('/todo')
+  getTodoOfUser(@Body('userId') userId: string): Promise<ToDo[]> {
+    return this.todoService.getByUserId(userId);
   }
 
   @Get('/:id')
