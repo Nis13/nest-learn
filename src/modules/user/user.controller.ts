@@ -6,8 +6,6 @@ import {
   Param,
   Post,
   Put,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import CreateUserDTO from './dto/create-user.dto';
@@ -29,13 +27,11 @@ export class UserController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
   create(@Body() userToCreate: CreateUserDTO): Promise<User> {
     return this.userService.saveUser(userToCreate);
   }
 
   @Put('/:id')
-  @UsePipes(ValidationPipe)
   update(
     @Param('id') id: string,
     @Body() userToUpdate: UpdateUserDTO,

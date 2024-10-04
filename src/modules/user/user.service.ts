@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import CreateUserDTO from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { EXCEPTION_MESSAGE } from 'src/constants/exception-message';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -16,8 +17,13 @@ export class UserService {
     return this.userRepository.getById(id);
   }
 
-  saveUser(userToCreate: CreateUserDTO): Promise<User> {
-    return this.userRepository.saveUser(userToCreate);
+  async saveUser(userToCreate: CreateUserDTO): Promise<User> {
+    console.log(userToCreate.password);
+    const password = await bcrypt.hash(userToCreate.password, 10);
+    return this.userRepository.saveUser({
+      ...userToCreate,
+      password: password,
+    });
   }
 
   update(id: string, userToUpdate: UpdateUserDTO): Promise<User> {

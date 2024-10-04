@@ -6,7 +6,7 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
-  constructor(private dataSource: DataSource) {
+  constructor(private readonly dataSource: DataSource) {
     super(User, dataSource.createEntityManager());
   }
   getAll(): Promise<User[]> {
