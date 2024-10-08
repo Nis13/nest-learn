@@ -15,10 +15,9 @@ import { TodoService } from '../todo/todo.service';
 import { ToDo } from '../todo/todo.entity';
 import { AuthMetaData } from 'src/custom-decorators/auth.metadata.decorator';
 import { Roles } from 'src/custom-decorators/roles.decorator';
-import { SKIP_AUTHORIZATION_CHECK } from 'src/constants/metadata-key.constants';
+import { AUTHENTICATE } from 'src/constants/metadata-key.constants';
 
 @Controller('user')
-@Roles(['admin'])
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -26,29 +25,34 @@ export class UserController {
   ) {}
 
   @Get()
+  @AuthMetaData(AUTHENTICATE)
+  @Roles(['admin'])
   getAll(): Promise<User[]> {
     return this.userService.getall();
   }
 
   @Get('/todo')
-  @Roles(['user'])
+  @AuthMetaData(AUTHENTICATE)
+  @Roles(['admin', 'user'])
   getTodoOfUser(@Body('userId') userId: string): Promise<ToDo[]> {
     return this.todoService.getByUserId(userId);
   }
 
   @Get('/:id')
-  @Roles(['user'])
+  @AuthMetaData(AUTHENTICATE)
+  @Roles(['admin', 'user'])
   getById(@Param('id') id: string): Promise<User> {
     return this.userService.getById(id);
   }
 
   @Post()
-  @AuthMetaData(SKIP_AUTHORIZATION_CHECK)
   create(@Body() userToCreate: CreateUserDTO): Promise<User> {
     return this.userService.saveUser(userToCreate);
   }
 
   @Put('/:id')
+  @AuthMetaData(AUTHENTICATE)
+  @Roles(['admin', 'user'])
   update(
     @Param('id') id: string,
     @Body() userToUpdate: UpdateUserDTO,
@@ -57,6 +61,8 @@ export class UserController {
   }
 
   @Delete('/:id')
+  @AuthMetaData(AUTHENTICATE)
+  @Roles(['admin', 'user'])
   delete(@Param('id') id: string): Promise<string> {
     return this.userService.delete(id);
   }

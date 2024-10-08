@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-    if (!authMetaData?.includes('SkipAuthorizationCheck')) {
+    if (!authMetaData) {
       return true;
     }
     const token = this.extractTokenFromHeader(request);

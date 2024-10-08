@@ -36,15 +36,18 @@ export class UserService {
 
   async saveUser(userToCreate: CreateUserDTO): Promise<User> {
     this.logger.log(`creating user with name: ${userToCreate.name}`);
-    const password = await bcrypt.hash(userToCreate.password, 10);
+    const password = await this.encryptPassword(userToCreate.password);
     return this.userRepository.saveUser({
       ...userToCreate,
       password: password,
     });
   }
 
-  update(id: string, userToUpdate: UpdateUserDTO): Promise<User> {
+  async update(id: string, userToUpdate: UpdateUserDTO): Promise<User> {
     this.logger.log(`Updating the user of Id: ${id}`);
+    if (userToUpdate.password) {
+      userToUpdate.password = await this.encryptPassword(userToUpdate.password);
+    }
     return this.userRepository.updateUser(id, userToUpdate);
   }
 
@@ -54,5 +57,8 @@ export class UserService {
       return EXCEPTION_MESSAGE.DELETION_SUCCESSFULL;
     }
     return EXCEPTION_MESSAGE.NOT_DELETED;
+  }
+  private async encryptPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, 10);
   }
 }
