@@ -11,8 +11,10 @@ import { TodoService } from './todo.service';
 import { ToDo } from './todo.entity';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
+import { Roles } from 'src/custom-decorators/roles.decorator';
 
 @Controller('todo')
+@Roles(['admin'])
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
@@ -22,6 +24,7 @@ export class TodoController {
   }
 
   @Get(':id')
+  @Roles(['user'])
   getById(@Param('id') id: string): Promise<ToDo> {
     return this.todoService.getById(id);
   }
@@ -35,6 +38,7 @@ export class TodoController {
   }
 
   @Put(':id')
+  @Roles(['user'])
   update(
     @Param('id') id: string,
     @Body() todoToUpdate: UpdateTodoDTO,
@@ -43,6 +47,7 @@ export class TodoController {
   }
 
   @Delete(':id')
+  @Roles(['delete'])
   delete(@Param('id') id: string): Promise<string> {
     return this.todoService.delete(id);
   }

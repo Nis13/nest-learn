@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-    if (authMetaData?.includes('SkipAuthorizationCheck')) {
+    if (!authMetaData?.includes('SkipAuthorizationCheck')) {
       return true;
     }
     const token = this.extractTokenFromHeader(request);
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: config.jwt.secret,
       });
-      request['user'] = payload;
+      request.user = payload;
     } catch (err) {
       throw new UnauthorizedException(err);
     }
