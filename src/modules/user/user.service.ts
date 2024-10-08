@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { User } from './user.entity';
 import CreateUserDTO from './dto/create-user.dto';
@@ -23,6 +23,15 @@ export class UserService {
   getById(id: string): Promise<User> {
     this.logger.log(`Getting the user of Id: ${id}`);
     return this.userRepository.getById(id);
+  }
+
+  async getByName(name: string): Promise<User> {
+    this.logger.log(`Getting the user of name: ${name}`, this.SERVICE);
+    const user = await this.userRepository.getByName(name);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   async saveUser(userToCreate: CreateUserDTO): Promise<User> {

@@ -6,9 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeORMConfig } from './config/typeorm.config';
 import { TodoModule } from './modules/todo/todo.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './modules/auth/auth.module';
 
 const ENV = process.env.NODE_ENV;
-console.log(ENV);
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,8 +17,15 @@ console.log(ENV);
     UserModule,
     TypeOrmModule.forRoot(TypeORMConfig),
     TodoModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
+  ],
 })
 export class AppModule {}

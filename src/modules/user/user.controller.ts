@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import CreateUserDTO from './dto/create-user.dto';
@@ -13,8 +14,11 @@ import { User } from './user.entity';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { TodoService } from '../todo/todo.service';
 import { ToDo } from '../todo/todo.entity';
+import { AuthGuard } from '../../guards/auth.guard';
+import { AuthMetaData } from 'src/auth.metadata.decorator';
 
 @Controller('user')
+@UseGuards(AuthGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -22,6 +26,7 @@ export class UserController {
   ) {}
 
   @Get()
+  @AuthMetaData('SkipAuthorizationCheck')
   getAll(): Promise<User[]> {
     return this.userService.getall();
   }
@@ -37,6 +42,7 @@ export class UserController {
   }
 
   @Post()
+  @AuthMetaData('SkipAuthorizationCheck')
   create(@Body() userToCreate: CreateUserDTO): Promise<User> {
     return this.userService.saveUser(userToCreate);
   }

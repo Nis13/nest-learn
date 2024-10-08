@@ -32,7 +32,6 @@ export class TodoRepository extends Repository<ToDo> {
 
   createTodo(userId: string, todoToCreate: CreateTodoDTO): Promise<ToDo> {
     const todo = this.create({ ...todoToCreate, userId });
-    console.log(todo);
     return this.save(todo);
   }
 

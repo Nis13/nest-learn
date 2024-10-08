@@ -1,4 +1,12 @@
-import { IsEmail, IsNotEmpty, IsStrongPassword, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsStrongPassword,
+  Length,
+} from 'class-validator';
+import { UserRole } from '../user-role.enum';
 
 export default class CreateUserDTO {
   @IsNotEmpty({ message: "Name shouldn't be empty" })
@@ -12,4 +20,8 @@ export default class CreateUserDTO {
   @IsNotEmpty({ message: "Password shouldn't be empty" })
   @IsStrongPassword()
   password: string;
+
+  @IsOptional()
+  @IsEnum(UserRole)
+  role?: UserRole;
 }

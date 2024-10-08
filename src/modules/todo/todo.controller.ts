@@ -31,7 +31,6 @@ export class TodoController {
     @Param('userId') userId: string,
     @Body() todoToCreate: CreateTodoDTO,
   ): Promise<ToDo> {
-    console.log(userId);
     return this.todoService.create(userId, todoToCreate);
   }
 

@@ -17,6 +17,9 @@ export class UserRepository extends Repository<User> {
     return this.findOneBy({ id: Equal(id) });
   }
 
+  getByName(name: string): Promise<User> {
+    return this.findOneBy({ name: Equal(name) });
+  }
   saveUser(userToCreate: CreateUserDTO): Promise<User> {
     const user = this.create(userToCreate);
     return this.save(user);
