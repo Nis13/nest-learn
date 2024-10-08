@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
@@ -9,6 +9,6 @@ import { TodoModule } from '../todo/todo.module';
 @Module({
   controllers: [UserController],
   imports: [TypeOrmModule.forFeature([User]), TodoModule],
-  providers: [UserRepository, UserService],
+  providers: [UserRepository, UserService, Logger],
 })
 export class UserModule {}

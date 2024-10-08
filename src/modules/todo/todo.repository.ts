@@ -1,4 +1,10 @@
-import { DataSource, DeleteResult, Repository, UpdateResult } from 'typeorm';
+import {
+  DataSource,
+  DeleteResult,
+  Equal,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { ToDo } from './todo.entity';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
@@ -19,13 +25,14 @@ export class TodoRepository extends Repository<ToDo> {
 
   getByUserId(userId: string): Promise<ToDo[]> {
     return this.find({
-      where: { user: { id: userId } },
+      where: { user: { id: Equal(userId) } },
       relations: ['user'],
     });
   }
 
   createTodo(userId: string, todoToCreate: CreateTodoDTO): Promise<ToDo> {
     const todo = this.create({ ...todoToCreate, userId });
+    console.log(todo);
     return this.save(todo);
   }
 

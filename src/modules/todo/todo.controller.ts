@@ -26,11 +26,12 @@ export class TodoController {
     return this.todoService.getById(id);
   }
 
-  @Post(':id')
+  @Post(':userId')
   create(
-    @Param('id') userId: string,
+    @Param('userId') userId: string,
     @Body() todoToCreate: CreateTodoDTO,
   ): Promise<ToDo> {
+    console.log(userId);
     return this.todoService.create(userId, todoToCreate);
   }
 
