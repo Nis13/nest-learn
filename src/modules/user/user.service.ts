@@ -5,6 +5,7 @@ import CreateUserDTO from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { EXCEPTION_MESSAGE } from 'src/constants/exception-message';
 import * as bcrypt from 'bcrypt';
+import ENTITY_NAME from 'src/constants/Entity';
 
 @Injectable()
 export class UserService {
@@ -14,20 +15,26 @@ export class UserService {
   ) {}
 
   SERVICE: string = UserService.name;
+  entityName: string = ENTITY_NAME.USER;
 
   getall(): Promise<User[]> {
     this.logger.log('Fetching all the users', this.SERVICE);
     return this.userRepository.getAll();
   }
 
-  getById(id: string): Promise<User> {
+  async getById(id: string): Promise<User> {
     this.logger.log(`Getting the user of Id: ${id}`);
-    return this.userRepository.getById(id);
+    const user = await this.userRepository.getById(id);
+    if (!user) {
+      throw new NotFoundException(`User of Id:${id} not found`);
+    }
+    return user;
   }
 
   async getByName(name: string): Promise<User> {
     this.logger.log(`Getting the user of name: ${name}`, this.SERVICE);
     const user = await this.userRepository.getByName(name);
+    console.log(user);
     if (!user) {
       throw new NotFoundException();
     }
@@ -54,9 +61,9 @@ export class UserService {
   async delete(id: string): Promise<string> {
     this.logger.log(`Deleting the user of Id: ${id}`);
     if ((await this.userRepository.deleteUser(id)).affected == 1) {
-      return EXCEPTION_MESSAGE.DELETION_SUCCESSFULL;
+      return EXCEPTION_MESSAGE.ENTITY_DELETED(ENTITY_NAME.USER, id);
     }
-    return EXCEPTION_MESSAGE.NOT_DELETED;
+    return EXCEPTION_MESSAGE.DELETION_FAILED(this.entityName, id);
   }
   private async encryptPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);

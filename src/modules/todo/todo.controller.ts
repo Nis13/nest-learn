@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { ToDo } from './todo.entity';
@@ -33,14 +34,15 @@ export class TodoController {
     return this.todoService.getById(id);
   }
 
-  @Post(':userId')
+  @Post()
   @AuthMetaData(AUTHENTICATE)
-  @Roles(['admin'])
+  @Roles(['admin', 'user'])
   create(
-    @Param('userId') userId: string,
+    @Request() request,
     @Body() todoToCreate: CreateTodoDTO,
   ): Promise<ToDo> {
-    return this.todoService.create(userId, todoToCreate);
+    console.log('here');
+    return this.todoService.create(request.user.sub, todoToCreate);
   }
 
   @Put(':id')

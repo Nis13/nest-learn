@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import CreateUserDTO from './dto/create-user.dto';
@@ -34,8 +35,16 @@ export class UserController {
   @Get('/todo')
   @AuthMetaData(AUTHENTICATE)
   @Roles(['admin', 'user'])
-  getTodoOfUser(@Body('userId') userId: string): Promise<ToDo[]> {
-    return this.todoService.getByUserId(userId);
+  getTodoOfUser(@Request() request): Promise<ToDo[]> {
+    return this.todoService.getByUserId(request.user.sub);
+  }
+
+  @Get('/profile')
+  @AuthMetaData(AUTHENTICATE)
+  @Roles(['admin', 'user'])
+  getProfile(@Request() request): Promise<User> {
+    console.log(request);
+    return this.userService.getById(request.user.sub);
   }
 
   @Get('/:id')

@@ -20,7 +20,7 @@ export class TodoRepository extends Repository<ToDo> {
   }
 
   getById(id: string): Promise<ToDo> {
-    return this.findOne({ where: { id: id }, relations: ['user'] });
+    return this.findOne({ where: { id: Equal(id) }, relations: ['user'] });
   }
 
   getByUserId(userId: string): Promise<ToDo[]> {
