@@ -56,16 +56,13 @@ export class UserController {
 
   @Post()
   create(@Body() userToCreate: CreateUserDTO) {
-    return this.userService.saveUser(userToCreate);
+    return this.userService.create(userToCreate);
   }
 
   @Put('/:id')
   @AuthMetaData(AUTHENTICATE)
   @Roles(['admin', 'user'])
-  update(
-    @Param('id') id: string,
-    @Body() userToUpdate: UpdateUserDTO,
-  ): Promise<User> {
+  update(@Param('id') id: string, @Body() userToUpdate: UpdateUserDTO) {
     return this.userService.update(id, userToUpdate);
   }
 
