@@ -15,6 +15,11 @@ const config = {
   jwt: {
     secret: process.env.SECRET,
   },
+  mongoDb: {
+    connectionString: process.env.MONGODB_CONNECTION_STRING,
+    mongoDB: process.env.MONGODB_DB,
+    mongoPort: process.env.MONGO_PORT,
+  },
 };
 
 export default config;

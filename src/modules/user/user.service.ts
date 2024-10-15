@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { UserRepository } from './user.repository';
+import { UserRepository } from './user.repository.mongo';
 import { User } from './user.entity';
 import CreateUserDTO from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
@@ -34,14 +34,13 @@ export class UserService {
   async getByName(name: string): Promise<User> {
     this.logger.log(`Getting the user of name: ${name}`, this.SERVICE);
     const user = await this.userRepository.getByName(name);
-    console.log(user);
     if (!user) {
       throw new NotFoundException();
     }
     return user;
   }
 
-  async saveUser(userToCreate: CreateUserDTO): Promise<User> {
+  async saveUser(userToCreate: CreateUserDTO) {
     this.logger.log(`creating user with name: ${userToCreate.name}`);
     const password = await this.encryptPassword(userToCreate.password);
     return this.userRepository.saveUser({
