@@ -41,7 +41,10 @@ export class UserService {
   }
 
   async create(userToCreate: CreateUserDTO): Promise<User> {
-    this.logger.log(`creating user with name: ${userToCreate.name}`);
+    this.logger.log(
+      `creating user with name: ${userToCreate.name}`,
+      this.SERVICE,
+    );
     const password = await this.encryptPassword(userToCreate.password);
     return await this.userRepository.createUser({
       ...userToCreate,

@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Request,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import CreateUserDTO from './dto/create-user.dto';
@@ -17,7 +18,9 @@ import { ToDo } from '../todo/todo.entity';
 import { AuthMetaData } from 'src/custom-decorators/auth.metadata.decorator';
 import { Roles } from 'src/custom-decorators/roles.decorator';
 import { AUTHENTICATE } from 'src/constants/metadata-key.constants';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
+@UseInterceptors(CacheInterceptor)
 @Controller('user')
 export class UserController {
   constructor(
@@ -28,8 +31,9 @@ export class UserController {
   @Get()
   @AuthMetaData(AUTHENTICATE)
   @Roles(['admin'])
-  getAll(): Promise<User[]> {
-    return this.userService.getall();
+  async getAll(): Promise<User[]> {
+    const allUsers = await this.userService.getall();
+    return allUsers;
   }
 
   @Get('/todo')
