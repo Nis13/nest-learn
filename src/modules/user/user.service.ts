@@ -65,7 +65,7 @@ export class UserService {
     }
     return EXCEPTION_MESSAGE.DELETION_FAILED(this.entityName, id);
   }
-  private async encryptPassword(password: string): Promise<string> {
+  async encryptPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);
   }
 }
