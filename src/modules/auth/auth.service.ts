@@ -1,14 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import CreateUserDTO from '../user/dto/create-user.dto';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private readonly jwtService: JwtService,
+    private logger: Logger,
   ) {}
+  SERVICE = AuthService.name;
 
   async signIn(username: string, pass: string): Promise<any> {
     const user = await this.userService.getByName(username);
@@ -19,5 +23,13 @@ export class AuthService {
     return {
       accessToken: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async signUpUser(userToCreate: CreateUserDTO): Promise<User> {
+    this.logger.log(
+      `creating user with name: ${userToCreate.name}`,
+      this.SERVICE,
+    );
+    return this.userService.saveUser(userToCreate);
   }
 }
