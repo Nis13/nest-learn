@@ -143,7 +143,7 @@ describe('UserService', () => {
 
       console.log(userToUpdate.password);
       expect(service.encryptPassword).toHaveBeenCalledWith('password');
-      expect(userRepository.updateUser).toHaveBeenCalledWith(userId, {
+      expect(mockUserRepo.updateUser).toHaveBeenCalledWith(userId, {
         ...userToUpdate,
         password: encryptedPassword,
       });
@@ -161,7 +161,7 @@ describe('UserService', () => {
       await service.update(userId, userToUpdate);
 
       expect(service.encryptPassword).not.toHaveBeenCalled();
-      expect(userRepository.updateUser).toHaveBeenCalledWith(
+      expect(mockUserRepo.updateUser).toHaveBeenCalledWith(
         userId,
         userToUpdate,
       );
