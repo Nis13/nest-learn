@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Request,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import CreateUserDTO from './dto/create-user.dto';
@@ -17,8 +18,11 @@ import { ToDo } from '../todo/todo.entity';
 import { AuthMetaData } from 'src/custom-decorators/auth.metadata.decorator';
 import { Roles } from 'src/custom-decorators/roles.decorator';
 import { AUTHENTICATE } from 'src/constants/metadata-key.constants';
+import { SerializeInterceptor } from 'src/interceptor/serialize.interceptor';
+import { GeneralUserDto } from './dto/general-user.dto';
 
 @Controller('user')
+@UseInterceptors(new SerializeInterceptor<GeneralUserDto>(GeneralUserDto))
 export class UserController {
   constructor(
     private readonly userService: UserService,

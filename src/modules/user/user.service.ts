@@ -23,7 +23,7 @@ export class UserService {
   }
 
   async getById(id: string): Promise<User> {
-    this.logger.log(`Getting the user of Id: ${id}`);
+    this.logger.log(`Getting the user of Id: ${id}`, this.SERVICE);
     const user = await this.userRepository.getById(id);
     if (!user) {
       throw new NotFoundException(`User of Id:${id} not found`);
@@ -42,7 +42,10 @@ export class UserService {
   }
 
   async saveUser(userToCreate: CreateUserDTO): Promise<User> {
-    this.logger.log(`creating user with name: ${userToCreate.name}`);
+    this.logger.log(
+      `creating user with name: ${userToCreate.name}`,
+      this.SERVICE,
+    );
     const password = await this.encryptPassword(userToCreate.password);
     return this.userRepository.saveUser({
       ...userToCreate,
@@ -51,7 +54,7 @@ export class UserService {
   }
 
   async update(id: string, userToUpdate: UpdateUserDTO): Promise<User> {
-    this.logger.log(`Updating the user of Id: ${id}`);
+    this.logger.log(`Updating the user of Id: ${id}`, this.SERVICE);
     if (userToUpdate.password) {
       userToUpdate.password = await this.encryptPassword(userToUpdate.password);
     }
@@ -59,12 +62,15 @@ export class UserService {
   }
 
   async delete(id: string): Promise<string> {
-    this.logger.log(`Deleting the user of Id: ${id}`);
-    if ((await this.userRepository.deleteUser(id)).affected == 1) {
+    this.logger.log(`Deleting the user of Id: ${id}`, this.SERVICE);
+    const deleteResult = await this.userRepository.deleteUser(id);
+    console.log(deleteResult);
+    if (deleteResult.affected == 1) {
       return EXCEPTION_MESSAGE.ENTITY_DELETED(ENTITY_NAME.USER, id);
     }
     return EXCEPTION_MESSAGE.DELETION_FAILED(this.entityName, id);
   }
+
   async encryptPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);
   }

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { ToDo } from '../todo/todo.entity';
 import { UserRole } from './user-role.enum';
+import { Exclude } from 'class-transformer';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -19,6 +20,7 @@ export class User extends BaseEntity {
   @Column()
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 
