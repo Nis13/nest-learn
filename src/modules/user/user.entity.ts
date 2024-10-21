@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ToDo } from '../todo/todo.entity';
+import { ToDo } from '../todo/entity/todo.entity';
 import { UserRole } from './user-role.enum';
 
 @Entity('user')

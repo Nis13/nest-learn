@@ -1,5 +1,6 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { TO_DO_STATUS } from '../todo-status.enum';
+import { RecurringFrequency } from 'src/constants/recurringTime.enum';
 
 export class CreateTodoDTO {
   @IsString()
@@ -7,4 +8,7 @@ export class CreateTodoDTO {
 
   @IsEnum(TO_DO_STATUS)
   status: TO_DO_STATUS;
+
+  @IsOptional()
+  frequency?: RecurringFrequency;
 }

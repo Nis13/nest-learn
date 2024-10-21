@@ -1,12 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { TodoRepository } from './todo.repository';
-import { ToDo } from './todo.entity';
+import { ToDo } from './entity/todo.entity';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { EXCEPTION_MESSAGE } from 'src/constants/exception-message';
 import { isAffected } from 'src/utils/check_affected';
-import ENTITY_NAME from 'src/constants/Entity';
 import { NotFoundException } from 'src/error-handlers/not-found.exception';
+import { ToDoFactoryProvider } from 'src/factory/ToDoFactoryProvider';
+import { ENTITY_NAME, ToDoType } from 'src/constants/Entity';
 
 @Injectable()
 export class TodoService {
@@ -44,6 +45,20 @@ export class TodoService {
       `Creating the todo with title: ${todoToCreate.title} of user of Id: ${userId} `,
     );
     return this.todoRepository.createTodo(userId, todoToCreate);
+  }
+
+  createUsingFactory(
+    type: ToDoType,
+    userId: string,
+    todoToCreate: CreateTodoDTO,
+  ): Promise<ToDo> {
+    const factory = ToDoFactoryProvider.getFactory(type);
+    const task = factory.createTask(
+      todoToCreate.title,
+      userId,
+      todoToCreate.frequency,
+    );
+    return this.todoRepository.createTodo(userId, task);
   }
 
   async update(

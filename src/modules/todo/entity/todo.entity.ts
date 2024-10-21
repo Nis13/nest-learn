@@ -8,8 +8,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TO_DO_STATUS } from './todo-status.enum';
-import { User } from '../user/user.entity';
+import { TO_DO_STATUS } from '../todo-status.enum';
+import { User } from '../../user/user.entity';
 
 @Entity('todo')
 export class ToDo extends BaseEntity {

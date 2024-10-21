@@ -5,7 +5,7 @@ import {
   Repository,
   UpdateResult,
 } from 'typeorm';
-import { ToDo } from './todo.entity';
+import { ToDo } from './entity/todo.entity';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { Injectable } from '@nestjs/common';

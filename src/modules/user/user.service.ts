@@ -5,7 +5,7 @@ import CreateUserDTO from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { EXCEPTION_MESSAGE } from 'src/constants/exception-message';
 import * as bcrypt from 'bcrypt';
-import ENTITY_NAME from 'src/constants/Entity';
+import { ENTITY_NAME } from 'src/constants/Entity';
 
 @Injectable()
 export class UserService {

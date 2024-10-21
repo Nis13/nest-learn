@@ -3,7 +3,7 @@ import { TodoController } from './todo.controller';
 import { TodoService } from './todo.service';
 import { TodoRepository } from './todo.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ToDo } from './todo.entity';
+import { ToDo } from './entity/todo.entity';
 
 @Module({
   controllers: [TodoController],

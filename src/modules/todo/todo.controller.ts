@@ -1,3 +1,4 @@
+import { ToDoType } from 'src/constants/Entity';
 import {
   Body,
   Controller,
@@ -9,7 +10,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
-import { ToDo } from './todo.entity';
+import { ToDo } from './entity/todo.entity';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { Roles } from 'src/custom-decorators/roles.decorator';
@@ -43,6 +44,22 @@ export class TodoController {
   ): Promise<ToDo> {
     console.log('here');
     return this.todoService.create(request.user.sub, todoToCreate);
+  }
+
+  @Post('/factory')
+  @AuthMetaData(AUTHENTICATE)
+  @Roles(['admin', 'user'])
+  createByFactory(
+    @Request() request,
+    @Body('type') type: ToDoType,
+    @Body()
+    todoToCreate: CreateTodoDTO,
+  ): Promise<ToDo> {
+    return this.todoService.createUsingFactory(
+      type,
+      request.user.sub,
+      todoToCreate,
+    );
   }
 
   @Put(':id')

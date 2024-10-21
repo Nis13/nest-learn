@@ -13,7 +13,7 @@ import CreateUserDTO from './dto/create-user.dto';
 import { User } from './user.entity';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { TodoService } from '../todo/todo.service';
-import { ToDo } from '../todo/todo.entity';
+import { ToDo } from '../todo/entity/todo.entity';
 import { AuthMetaData } from 'src/custom-decorators/auth.metadata.decorator';
 import { Roles } from 'src/custom-decorators/roles.decorator';
 import { AUTHENTICATE } from 'src/constants/metadata-key.constants';
