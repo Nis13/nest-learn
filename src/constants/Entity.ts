@@ -3,7 +3,7 @@ export const enum ENTITY_NAME {
   TODO = 'todo',
 }
 
-export const enum ToDoType {
+export enum ToDoOptions {
   SimpleToDo = 'simple',
   RecurringToDo = 'recurring',
 }

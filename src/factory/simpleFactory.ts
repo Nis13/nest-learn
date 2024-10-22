@@ -1,10 +1,10 @@
-import { ToDo } from 'src/modules/todo/entity/todo.entity';
 import { IToDoFactory } from './IToDoFactory';
 import { TO_DO_STATUS } from 'src/modules/todo/todo-status.enum';
+import { SimpleToDO } from 'src/modules/todo/entity/simple.entity';
 
 export class SimpleFactory implements IToDoFactory {
-  createTask(title: string, userId: string): ToDo {
-    const task = new ToDo();
+  createTask(title: string, userId: string): SimpleToDO {
+    const task = new SimpleToDO();
     task.title = title;
     task.userId = userId;
     task.status = TO_DO_STATUS.PENDING;

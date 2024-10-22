@@ -9,6 +9,7 @@ import { ToDo } from './entity/todo.entity';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { Injectable } from '@nestjs/common';
+import { ToDoType } from 'src/constants/ToDoType';
 
 @Injectable()
 export class TodoRepository extends Repository<ToDo> {
@@ -33,6 +34,10 @@ export class TodoRepository extends Repository<ToDo> {
   createTodo(userId: string, todoToCreate: CreateTodoDTO): Promise<ToDo> {
     const todo = this.create({ ...todoToCreate, userId });
     return this.save(todo);
+  }
+
+  createTodoFactory(todoToCreate: ToDoType): Promise<ToDoType> {
+    return this.save(todoToCreate);
   }
 
   updateTodo(id: string, todoToUpdate: UpdateTodoDTO): Promise<UpdateResult> {

@@ -7,7 +7,8 @@ import { EXCEPTION_MESSAGE } from 'src/constants/exception-message';
 import { isAffected } from 'src/utils/check_affected';
 import { NotFoundException } from 'src/error-handlers/not-found.exception';
 import { ToDoFactoryProvider } from 'src/factory/ToDoFactoryProvider';
-import { ENTITY_NAME, ToDoType } from 'src/constants/Entity';
+import { ENTITY_NAME, ToDoOptions } from 'src/constants/Entity';
+import { ToDoType } from 'src/constants/ToDoType';
 
 @Injectable()
 export class TodoService {
@@ -48,17 +49,17 @@ export class TodoService {
   }
 
   createUsingFactory(
-    type: ToDoType,
+    type: ToDoOptions,
     userId: string,
     todoToCreate: CreateTodoDTO,
-  ): Promise<ToDo> {
+  ) {
     const factory = ToDoFactoryProvider.getFactory(type);
-    const task = factory.createTask(
+    const task: ToDoType = factory.createTask(
       todoToCreate.title,
       userId,
       todoToCreate.frequency,
     );
-    return this.todoRepository.createTodo(userId, task);
+    return this.todoRepository.createTodoFactory(task);
   }
 
   async update(

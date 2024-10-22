@@ -7,12 +7,14 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  TableInheritance,
 } from 'typeorm';
 import { TO_DO_STATUS } from '../todo-status.enum';
 import { User } from '../../user/user.entity';
 
-@Entity('todo')
-export class ToDo extends BaseEntity {
+@Entity()
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
+export abstract class ToDo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

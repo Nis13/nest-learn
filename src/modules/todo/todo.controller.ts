@@ -1,4 +1,4 @@
-import { ToDoType } from 'src/constants/Entity';
+import { ToDoOptions } from 'src/constants/Entity';
 import {
   Body,
   Controller,
@@ -42,7 +42,6 @@ export class TodoController {
     @Request() request,
     @Body() todoToCreate: CreateTodoDTO,
   ): Promise<ToDo> {
-    console.log('here');
     return this.todoService.create(request.user.sub, todoToCreate);
   }
 
@@ -51,10 +50,10 @@ export class TodoController {
   @Roles(['admin', 'user'])
   createByFactory(
     @Request() request,
-    @Body('type') type: ToDoType,
+    @Body('type') type: ToDoOptions,
     @Body()
     todoToCreate: CreateTodoDTO,
-  ): Promise<ToDo> {
+  ) {
     return this.todoService.createUsingFactory(
       type,
       request.user.sub,
