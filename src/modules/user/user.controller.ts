@@ -17,6 +17,7 @@ import { ToDo } from '../todo/todo.entity';
 import { AuthMetaData } from 'src/custom-decorators/auth.metadata.decorator';
 import { Roles } from 'src/custom-decorators/roles.decorator';
 import { AUTHENTICATE } from 'src/constants/metadata-key.constants';
+import CreateUserWithProfile from './dto/user-with-profile';
 
 @Controller('user')
 export class UserController {
@@ -57,6 +58,12 @@ export class UserController {
   @Post()
   create(@Body() userToCreate: CreateUserDTO): Promise<User> {
     return this.userService.saveUser(userToCreate);
+  }
+
+  @Post('/profile')
+  createProfile(@Body() userToCreate: CreateUserWithProfile): Promise<User> {
+    console.log(userToCreate);
+    return this.userService.saveUserWithProfile(userToCreate);
   }
 
   @Put('/:id')

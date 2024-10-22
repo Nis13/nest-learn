@@ -10,6 +10,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { UserProfileModule } from './modules/user-profile/user-profile.module';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
+// import { UserProfileModule } from './modules/user-profile/user-profile.module';
 
 const ENV = process.env.NODE_ENV;
 @Module({
@@ -18,9 +22,21 @@ const ENV = process.env.NODE_ENV;
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
     }),
     UserModule,
-    TypeOrmModule.forRoot(TypeORMConfig),
+    TypeOrmModule.forRootAsync({
+      useFactory() {
+        return TypeORMConfig;
+      },
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+
+        return addTransactionalDataSource(new DataSource(options));
+      },
+    }),
     TodoModule,
     AuthModule,
+    UserProfileModule,
   ],
   controllers: [AppController],
   providers: [

@@ -6,12 +6,18 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 import { EXCEPTION_MESSAGE } from 'src/constants/exception-message';
 import * as bcrypt from 'bcrypt';
 import ENTITY_NAME from 'src/constants/Entity';
+import { DataSource } from 'typeorm';
+import CreateUserWithProfile from './dto/user-with-profile';
+import { UserProfileService } from '../user-profile/user-profile.service';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly logger: Logger,
+    private readonly dataSource: DataSource,
+    private readonly userProfileService: UserProfileService,
   ) {}
 
   SERVICE: string = UserService.name;
@@ -48,6 +54,20 @@ export class UserService {
       ...userToCreate,
       password: password,
     });
+  }
+
+  @Transactional()
+  async saveUserWithProfile(
+    userToCreate: CreateUserWithProfile,
+  ): Promise<User> {
+    console.log('from user service- whole', userToCreate);
+    const savedUser = await this.saveUser(userToCreate.user);
+    // throw new NotFoundException('error thrown');
+    await this.userProfileService.saveProfile(
+      savedUser.id,
+      userToCreate.profile,
+    );
+    return savedUser;
   }
 
   async update(id: string, userToUpdate: UpdateUserDTO): Promise<User> {

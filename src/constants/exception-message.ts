@@ -1,10 +1,5 @@
 import returnMessage from 'src/utils/returnExceptionMessage';
 
-// export   enum EXCEPTION_MESSAGE {
-//   NOT_DELETED :"can't be deleted message",
-//   DELETION_SUCCESSFULL :'sucessfully deleted message',
-//   NOT_UPDATED :"can't be updated",
-// }
 export const EXCEPTION_MESSAGE = {
   ENTITY_NOT_FOUND: (entity: string, id: string): string =>
     returnMessage(entity, id, 'not found'),

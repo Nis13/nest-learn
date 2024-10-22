@@ -41,7 +41,6 @@ export class TodoController {
     @Request() request,
     @Body() todoToCreate: CreateTodoDTO,
   ): Promise<ToDo> {
-    console.log('here');
     return this.todoService.create(request.user.sub, todoToCreate);
   }
 
