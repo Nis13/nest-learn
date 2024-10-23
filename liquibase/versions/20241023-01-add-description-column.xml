@@ -1,0 +1,45 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+						http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd
+						http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+	<!-- To add Column:description in table To-do with Precondition -->
+	<changeSet author="Admin" id="2">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="to_do" />
+			<not>
+				<columnExists tableName="to_do" columnName="description" />
+			</not>
+		</preConditions>
+		<addColumn tableName="to_do">
+			<column name="description" type="varchar(255)" />
+		</addColumn>
+	</changeSet>
+	<!-- To add drop Column:Description with preConsditions -->
+	<changeSet author="Admin2" id="1729585333144-8">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="to_do" />
+			<not>
+				<columnExists tableName="description" columnName="description" />
+			</not>
+		</preConditions>
+		<dropColumn tableName="to_do" columnName="description" />
+	</changeSet>
+	<!-- To add Column:description in table To-do with Precondition and rollback -->
+	<changeSet author="Admin" id="1729585333144-9">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="to_do" />
+			<not>
+				<columnExists tableName="to_do" columnName="description" />
+			</not>
+		</preConditions>
+		<addColumn tableName="to_do">
+			<column name="description" type="varchar(255)" />
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="to_do" columnName="description" />
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

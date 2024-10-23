@@ -1,0 +1,110 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+						http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd
+						http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+	<changeSet author="Admin (generated)" id="1729585333144-1">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="user" />
+			</not>
+		</preConditions>
+		<createTable tableName="user">
+			<column defaultValueComputed="uuid_generate_v4()" name="id" type="UUID">
+				<constraints nullable="false" primaryKey="true"
+					primaryKeyName="PK_cace4a159ff9f2512dd42373760" />
+			</column>
+			<column name="name" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column name="email" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column name="password" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValue="user" name="role" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="Admin (generated)" id="1729585333144-2">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="userAdd" />
+			</not>
+		</preConditions>
+		<createTable tableName="userAdd">
+			<column defaultValueComputed="uuid_generate_v4()" name="id" type="UUID">
+				<constraints nullable="false" primaryKey="true" primaryKeyName="pk_3" />
+			</column>
+			<column name="name" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column name="email" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column name="password" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValue="user" name="role" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="Admin (generated)" id="1729585333144-3">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="to_do" />
+			</not>
+		</preConditions>
+		<createTable tableName="to_do">
+			<column defaultValueComputed="uuid_generate_v4()" name="id" type="UUID">
+				<constraints nullable="false" primaryKey="true"
+					primaryKeyName="PK_19d14b861427e18d619639c8f2b" />
+			</column>
+			<column name="title" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column name="status" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+			<column name="user_id" type="UUID">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValueComputed="now()" name="created_at"
+				type="TIMESTAMP WITHOUT TIME ZONE">
+				<constraints nullable="false" />
+			</column>
+			<column name="deleted_at" type="TIMESTAMP WITHOUT TIME ZONE" />
+			<column name="frequency" type="TO_DO_FREQUENCY_ENUM" />
+			<column name="type" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="Admin (generated)" id="1729585333144-4">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="to_do" columnName="type" />
+			</not>
+		</preConditions>
+		<createIndex indexName="IDX_1c1a5405752c566a8eeb2cc56d" tableName="to_do">
+			<column name="type" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="Admin (generated)" id="1729585333144-5">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<foreignKeyConstraintExists foreignKeyName="FK_f95b58e1f020b1646b8a6725785"
+					foreignKeyTableName="to_do" />
+			</not>
+		</preConditions>
+		<addForeignKeyConstraint baseColumnNames="user_id" baseTableName="to_do"
+			constraintName="FK_f95b58e1f020b1646b8a6725785" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="id" referencedTableName="user" validate="true" />
+	</changeSet>
+</databaseChangeLog>

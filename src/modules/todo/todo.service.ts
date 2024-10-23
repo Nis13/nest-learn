@@ -56,6 +56,7 @@ export class TodoService {
     const factory = ToDoFactoryProvider.getFactory(type);
     const task: ToDoType = factory.createTask(
       todoToCreate.title,
+      todoToCreate.description,
       userId,
       todoToCreate.frequency,
     );

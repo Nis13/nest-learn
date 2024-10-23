@@ -24,6 +24,9 @@ export abstract class ToDo extends BaseEntity {
   @Column()
   status: TO_DO_STATUS;
 
+  @Column()
+  description: string;
+
   @Column({ name: 'user_id' })
   userId: string;
 

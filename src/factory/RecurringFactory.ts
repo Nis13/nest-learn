@@ -6,11 +6,13 @@ import { RecurringToDo } from 'src/modules/todo/entity/recurring.entity';
 export class RecurringFactory implements IToDoFactory {
   createTask(
     title: string,
+    description: string,
     userId: string,
     frequency?: RecurringFrequency,
   ): RecurringToDo {
     const task = new RecurringToDo();
     task.title = title;
+    task.description = description;
     task.userId = userId;
     task.status = TO_DO_STATUS.PENDING;
     task.frequency = frequency || RecurringFrequency.NONE;

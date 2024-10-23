@@ -8,9 +8,9 @@ import { User } from '../user/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    private logger: Logger,
+    private readonly logger: Logger,
   ) {}
   SERVICE = AuthService.name;
 

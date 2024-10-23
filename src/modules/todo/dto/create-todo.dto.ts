@@ -9,6 +9,9 @@ export class CreateTodoDTO {
   @IsEnum(TO_DO_STATUS)
   status: TO_DO_STATUS;
 
+  @IsString()
+  description: string;
+
   @IsOptional()
   frequency?: RecurringFrequency;
 }

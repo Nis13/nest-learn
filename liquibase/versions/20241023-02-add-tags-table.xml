@@ -1,0 +1,55 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+						http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd
+						http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+						
+	<!-- To add the Table:tags -->
+	<changeSet id="1729585333144-10" author="Admin 3">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="tags" />
+			</not>
+		</preConditions>
+		<createTable tableName="tags">
+			<column name="id" type="UUID" defaultValueComputed="uuid_generate_v4()">
+				<constraints primaryKey="true" nullable="false" primaryKeyName="primaryKeyOfTags" />
+			</column>
+			<column name="tag_name" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<!-- To create Join Table of many to many relation of to_do and tags -->
+	<changeSet id="729585333144-11" author="Admin 3">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="todo_tags" />
+			</not>
+		</preConditions>
+		<createTable tableName="todo_tags">
+			<column name="todo_id" type="uuid">
+				<constraints nullable="false" />
+			</column>
+			<column name="tag_id" type="uuid">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<!-- To add foreign key constraints -->
+		<addForeignKeyConstraint
+		 	baseTableName="todo_tags" 
+			baseColumnNames="todo_id"
+			referencedTableName="to_do" 
+			referencedColumnNames="id"
+			constraintName="fk_todo_tags_todo" />
+
+		<addForeignKeyConstraint 
+			baseTableName="todo_tags" 
+			baseColumnNames="tag_id"
+			referencedTableName="tags" 
+			referencedColumnNames="id" 
+			constraintName="fk_todo_tags_tag" />
+	</changeSet>
+</databaseChangeLog>
