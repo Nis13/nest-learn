@@ -2,7 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import config from './config';
 
 export const TypeORMConfig: TypeOrmModuleOptions = {
-  type: 'postgres',
+  type: 'mongodb',
   host: config.database.host,
   port: +config.database.port,
   username: config.database.user,

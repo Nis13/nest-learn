@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { UserRepository } from './user.repository';
+import { UserRepository } from './user.repository.mongo';
 import { User } from './user.entity';
 import CreateUserDTO from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
@@ -34,33 +34,45 @@ export class UserService {
   async getByName(name: string): Promise<User> {
     this.logger.log(`Getting the user of name: ${name}`, this.SERVICE);
     const user = await this.userRepository.getByName(name);
-    console.log(user);
     if (!user) {
       throw new NotFoundException();
     }
     return user;
   }
 
-  async saveUser(userToCreate: CreateUserDTO): Promise<User> {
-    this.logger.log(`creating user with name: ${userToCreate.name}`);
+  async create(userToCreate: CreateUserDTO): Promise<User> {
+    this.logger.log(
+      `creating user with name: ${userToCreate.name}`,
+      this.SERVICE,
+    );
     const password = await this.encryptPassword(userToCreate.password);
-    return this.userRepository.saveUser({
+    return await this.userRepository.createUser({
       ...userToCreate,
       password: password,
     });
   }
 
   async update(id: string, userToUpdate: UpdateUserDTO): Promise<User> {
-    this.logger.log(`Updating the user of Id: ${id}`);
+    this.logger.log(`Updating the user of Id: ${id}`, this.SERVICE);
     if (userToUpdate.password) {
       userToUpdate.password = await this.encryptPassword(userToUpdate.password);
     }
-    return this.userRepository.updateUser(id, userToUpdate);
+    const updatedResult = await this.userRepository.updateUser(
+      id,
+      userToUpdate,
+    );
+    if (!updatedResult.value) {
+      throw new NotFoundException(
+        EXCEPTION_MESSAGE.UPDATE_FAILED(this.entityName, id),
+      );
+    }
+    return updatedResult.value;
   }
 
   async delete(id: string): Promise<string> {
     this.logger.log(`Deleting the user of Id: ${id}`);
-    if ((await this.userRepository.deleteUser(id)).affected == 1) {
+    const deletedResult = await this.userRepository.deleteUser(id);
+    if (deletedResult.value) {
       return EXCEPTION_MESSAGE.ENTITY_DELETED(ENTITY_NAME.USER, id);
     }
     return EXCEPTION_MESSAGE.DELETION_FAILED(this.entityName, id);

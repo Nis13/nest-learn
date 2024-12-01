@@ -6,15 +6,16 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  ObjectIdColumn,
 } from 'typeorm';
 import { TO_DO_STATUS } from './todo-status.enum';
 import { User } from '../user/user.entity';
+import { ObjectId } from 'mongodb';
 
 @Entity('todo')
 export class ToDo extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @ObjectIdColumn()
+  _id: ObjectId;
 
   @Column()
   title: string;
@@ -23,7 +24,7 @@ export class ToDo extends BaseEntity {
   status: TO_DO_STATUS;
 
   @Column({ name: 'user_id' })
-  userId: string;
+  userId: ObjectId;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

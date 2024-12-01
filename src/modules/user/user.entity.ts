@@ -1,17 +1,12 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectIdColumn, OneToMany } from 'typeorm';
 import { ToDo } from '../todo/todo.entity';
 import { UserRole } from './user-role.enum';
+import { ObjectId } from 'mongodb';
 
 @Entity('user')
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @ObjectIdColumn()
+  _id: ObjectId;
 
   @Column()
   name: string;

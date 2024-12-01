@@ -1,10 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { TodoRepository } from './todo.repository';
+import { TodoRepository } from './todo.repository.mongo';
 import { ToDo } from './todo.entity';
 import { CreateTodoDTO } from './dto/create-todo.dto';
 import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { EXCEPTION_MESSAGE } from 'src/constants/exception-message';
-import { isAffected } from 'src/utils/check_affected';
 import ENTITY_NAME from 'src/constants/Entity';
 import { NotFoundException } from 'src/error-handlers/not-found.exception';
 
@@ -43,6 +42,7 @@ export class TodoService {
     this.logger.log(
       `Creating the todo with title: ${todoToCreate.title} of user of Id: ${userId} `,
     );
+    // const userIdObject = new ObjectId(userId);
     return this.todoRepository.createTodo(userId, todoToCreate);
   }
 
@@ -52,8 +52,8 @@ export class TodoService {
   ): Promise<ToDo | string> {
     this.logger.log(`Updating the Todo of Id: ${id}`);
     const result = await this.todoRepository.updateTodo(id, todoToUpdate);
-    if (result.affected > 0) {
-      return this.getById(id);
+    if (result.value) {
+      return result.value;
     }
     return EXCEPTION_MESSAGE.UPDATE_FAILED(this.entityName, id);
   }
@@ -61,7 +61,7 @@ export class TodoService {
   async delete(id: string): Promise<string> {
     this.logger.log(`Deleting the todo of Id: ${id}`);
     const result = await this.todoRepository.deleteTodo(id);
-    if (!isAffected(result)) {
+    if (!result.value) {
       this.logger.warn(`The todo of Id: ${id} couldn't be deleted`);
       return EXCEPTION_MESSAGE.DELETION_FAILED(this.entityName, id);
     }

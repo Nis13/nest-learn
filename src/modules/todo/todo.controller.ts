@@ -29,7 +29,7 @@ export class TodoController {
 
   @Get(':id')
   @AuthMetaData(AUTHENTICATE)
-  @Roles(['admin', 'user'])
+  @Roles(['admin'])
   getById(@Param('id') id: string): Promise<ToDo> {
     return this.todoService.getById(id);
   }
@@ -41,7 +41,6 @@ export class TodoController {
     @Request() request,
     @Body() todoToCreate: CreateTodoDTO,
   ): Promise<ToDo> {
-    console.log('here');
     return this.todoService.create(request.user.sub, todoToCreate);
   }
 
@@ -57,7 +56,7 @@ export class TodoController {
 
   @Delete(':id')
   @AuthMetaData(AUTHENTICATE)
-  @Roles(['admin', 'user'])
+  @Roles(['admin'])
   delete(@Param('id') id: string): Promise<string> {
     return this.todoService.delete(id);
   }
